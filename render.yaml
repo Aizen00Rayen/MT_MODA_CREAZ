@@ -1,0 +1,35 @@
+services:
+  - type: web
+    name: mt-moda-creaz-backend
+    runtime: python
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: daphne -b 0.0.0.0 -p $PORT mt_moda_creaz.asgi:application
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: mt_moda_creaz.settings
+      - key: DEBUG
+        value: "False"
+      - key: ALLOWED_HOSTS
+        value: mt-moda-creaz-backend.onrender.com
+      - key: CORS_ALLOWED_ORIGINS
+        value: https://mt-moda-creaz.vercel.app
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: mt-moda-creaz-db
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          name: mt-moda-creaz-redis
+          type: redis
+          property: connectionString
+
+databases:
+  - name: mt-moda-creaz-db
+    plan: free
+
+  - name: mt-moda-creaz-redis
+    plan: free
+    ipAllowList: []
