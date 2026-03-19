@@ -2,45 +2,85 @@ import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Sparkles, Users } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
-import Logo from '@/components/ui/Logo'
+import SewingBackground from './SewingBackground'
 
 export default function HeroSection() {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Background */}
+      {/* Base gradient */}
       <div className="absolute inset-0 bg-dark-gradient" />
 
-      {/* Subtle grid pattern */}
+      {/* Sewing animation (needles, threads, fabric) */}
+      <SewingBackground />
+
+      {/* Radial vignette to keep center readable */}
       <div
-        className="absolute inset-0 opacity-[0.03]"
+        className="absolute inset-0"
         style={{
-          backgroundImage: 'linear-gradient(#C9A84C 1px, transparent 1px), linear-gradient(90deg, #C9A84C 1px, transparent 1px)',
-          backgroundSize: '60px 60px',
+          background:
+            'radial-gradient(ellipse 70% 65% at 50% 50%, transparent 0%, rgba(10,10,10,0.55) 100%)',
         }}
       />
-
-      {/* Floating gold orbs */}
-      <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-gold/5 rounded-full blur-3xl animate-float" />
-      <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-gold/3 rounded-full blur-3xl animate-float" style={{ animationDelay: '3s' }} />
 
       <div className="relative z-10 text-center px-6 max-w-5xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
+          transition={{ duration: 0.9, ease: 'easeOut' }}
         >
           {/* Eyebrow */}
-          <p className="font-ui text-xs tracking-[0.4em] uppercase text-gold/70 mb-6">
+          <p className="font-ui text-xs tracking-[0.4em] uppercase text-gold/70 mb-8">
             Haute Couture Algérienne
           </p>
 
-          {/* Logo */}
-          <div className="flex justify-center mb-6">
-            <Logo className="h-40 md:h-56" />
-          </div>
+          {/* Logo — mix-blend-mode:screen removes the black background on the dark page */}
+          <motion.div
+            className="flex justify-center mb-2"
+            initial={{ opacity: 0, scale: 0.92 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1.1, delay: 0.15, ease: 'easeOut' }}
+          >
+            <div className="relative">
+              {/* Soft gold ambient glow behind logo */}
+              <div
+                className="absolute inset-0 rounded-full blur-3xl"
+                style={{ background: 'rgba(201,168,76,0.08)', transform: 'scale(1.3)' }}
+              />
+              <img
+                src="/logo.jpeg"
+                alt="MT Moda Creaz"
+                className="relative h-52 md:h-72 object-contain"
+                style={{ mixBlendMode: 'screen' }}
+              />
+            </div>
+          </motion.div>
+
+          {/* Decorative gold stitch line */}
+          <motion.div
+            className="flex items-center gap-3 justify-center my-6"
+            initial={{ opacity: 0, scaleX: 0 }}
+            animate={{ opacity: 1, scaleX: 1 }}
+            transition={{ duration: 0.8, delay: 0.5 }}
+          >
+            <div
+              className="h-px flex-1 max-w-[120px]"
+              style={{
+                backgroundImage:
+                  'repeating-linear-gradient(90deg, rgba(201,168,76,0.6) 0px, rgba(201,168,76,0.6) 8px, transparent 8px, transparent 16px)',
+              }}
+            />
+            <span className="text-gold/50 text-xs">✦</span>
+            <div
+              className="h-px flex-1 max-w-[120px]"
+              style={{
+                backgroundImage:
+                  'repeating-linear-gradient(90deg, rgba(201,168,76,0.6) 0px, rgba(201,168,76,0.6) 8px, transparent 8px, transparent 16px)',
+              }}
+            />
+          </motion.div>
 
           {/* Tagline */}
-          <p className="font-editorial italic text-xl md:text-2xl text-ivory/60 mb-10 mt-6">
+          <p className="font-editorial italic text-xl md:text-2xl text-ivory/55 mb-10">
             L'haute couture algérienne, réinventée.
           </p>
 

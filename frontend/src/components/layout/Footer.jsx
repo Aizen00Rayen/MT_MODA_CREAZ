@@ -35,7 +35,7 @@ export default function Footer() {
             </p>
           </div>
         </div>
-        <div className="gold-line mb-6" />
+        <div className="stitch-line mb-6" />
         <p className="font-ui text-xs text-ivory/30 text-center tracking-wide">
           © 2024 MT Moda Creaz — Haute couture algérienne
         </p>

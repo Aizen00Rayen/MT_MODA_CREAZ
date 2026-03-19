@@ -22,6 +22,22 @@ html {
 
 body {
   background-color: #0A0A0A;
+  /* Subtle fabric weave texture across the entire site */
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 43px,
+      rgba(201, 168, 76, 0.022) 43px,
+      rgba(201, 168, 76, 0.022) 44px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 43px,
+      rgba(201, 168, 76, 0.014) 43px,
+      rgba(201, 168, 76, 0.014) 44px
+    );
   color: #FAFAFA;
   font-family: 'Josefin Sans', sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -80,6 +96,18 @@ body {
 .gold-line {
   height: 1px;
   background: linear-gradient(90deg, transparent, #C9A84C, transparent);
+}
+
+/* Stitching decorative line — mimics sewing thread */
+.stitch-line {
+  height: 1px;
+  background-image: repeating-linear-gradient(
+    90deg,
+    rgba(201, 168, 76, 0.55) 0px,
+    rgba(201, 168, 76, 0.55) 9px,
+    transparent 9px,
+    transparent 17px
+  );
 }
 
 /* Glassmorphism card */
