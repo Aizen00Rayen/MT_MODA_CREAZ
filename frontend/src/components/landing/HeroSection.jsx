@@ -105,7 +105,7 @@ export default function HeroSection() {
             {[
               { value: '500+', label: 'Couturières' },
               { value: '10 000+', label: 'Créations' },
-              { value: '48', label: 'Wilayas' },
+              { value: '69', label: 'Wilayas' },
             ].map(({ value, label }) => (
               <div key={label} className="text-center">
                 <p className="font-display text-2xl md:text-3xl text-gold-gradient">{value}</p>

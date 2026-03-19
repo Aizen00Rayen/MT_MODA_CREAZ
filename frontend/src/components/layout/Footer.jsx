@@ -31,7 +31,7 @@ export default function Footer() {
           <div>
             <h4 className="font-ui text-xs tracking-widest uppercase text-gold mb-4">Wilayas</h4>
             <p className="font-ui text-xs text-ivory/50">
-              Présents dans toutes les 58 wilayas d'Algérie.
+              Présents dans toutes les 69 wilayas d'Algérie.
             </p>
           </div>
         </div>
