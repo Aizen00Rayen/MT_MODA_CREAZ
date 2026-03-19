@@ -18,14 +18,6 @@ async function generateImage(promptText, styleTags) {
   const seed = Date.now() % 99999
   const url = `https://image.pollinations.ai/prompt/${encoded}?width=768&height=768&seed=${seed}&nologo=true&model=flux`
 
-  // Verify the image loads
-  await new Promise((resolve, reject) => {
-    const img = new Image()
-    img.onload = resolve
-    img.onerror = () => reject(new Error('Génération échouée. Réessayez.'))
-    img.src = url
-  })
-
   return url
 }
 
