@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import Logo from '@/components/ui/Logo'
 
 export default function Footer() {
   return (
@@ -6,9 +7,9 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
           <div>
-            <h3 className="font-display text-xl text-ivory mb-3">
-              <span className="text-gold-gradient">MT</span> Moda Creaz
-            </h3>
+            <Link to="/" className="inline-block mb-3">
+              <Logo className="h-14" />
+            </Link>
             <p className="font-ui text-xs text-ivory/50 leading-relaxed">
               La plateforme de haute couture algérienne. Connectons créateurs et clients.
             </p>

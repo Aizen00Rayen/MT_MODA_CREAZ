@@ -5,6 +5,7 @@ import { useAuthStore } from '@/store/authStore'
 import { useLogout } from '@/hooks/useAuth'
 import { useUnreadCount } from '@/hooks/useNotifications'
 import { Avatar } from '@/components/ui/Avatar'
+import Logo from '@/components/ui/Logo'
 import clsx from 'clsx'
 
 export default function Navbar() {
@@ -46,8 +47,8 @@ export default function Navbar() {
     >
       <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
         {/* Logo */}
-        <Link to="/" className="font-display text-xl text-ivory">
-          <span className="text-gold-gradient">MT</span> Moda Creaz
+        <Link to="/">
+          <Logo className="h-10" />
         </Link>
 
         {/* Desktop nav */}

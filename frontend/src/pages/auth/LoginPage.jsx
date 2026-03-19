@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { User, Scissors, Shield } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { useDemoLogin } from '@/hooks/useAuth'
+import Logo from '@/components/ui/Logo'
 import clsx from 'clsx'
 
 const ROLES = [
@@ -48,11 +49,8 @@ export default function LoginPage() {
     <div className="min-h-screen bg-obsidian flex items-center justify-center px-6 py-12">
       <div className="w-full max-w-lg">
         {/* Logo */}
-        <div className="text-center mb-10">
-          <h1 className="font-display text-4xl text-ivory mb-2">
-            <span className="text-gold-gradient">MT</span> Moda Creaz
-          </h1>
-          <p className="font-editorial italic text-ivory/50">Mode algérienne haute couture</p>
+        <div className="flex justify-center mb-10">
+          <Logo className="h-28" />
         </div>
 
         <div className="glass-card p-8 rounded-sm">

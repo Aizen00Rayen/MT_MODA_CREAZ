@@ -1,14 +1,14 @@
 import { Link } from 'react-router-dom'
 import { ArrowLeft } from 'lucide-react'
+import Logo from '@/components/ui/Logo'
 
 export default function RegisterPage() {
   return (
     <div className="min-h-screen bg-obsidian flex items-center justify-center px-6">
       <div className="w-full max-w-md text-center">
-        <h1 className="font-display text-4xl text-ivory mb-2">
-          <span className="text-gold-gradient">MT</span> Moda Creaz
-        </h1>
-        <p className="font-editorial italic text-ivory/50 mb-10">Mode algérienne haute couture</p>
+        <div className="flex justify-center mb-10">
+          <Logo className="h-28" />
+        </div>
 
         <div className="glass-card p-8 rounded-sm">
           <div className="w-16 h-16 rounded-full border border-gold/30 flex items-center justify-center mx-auto mb-6">

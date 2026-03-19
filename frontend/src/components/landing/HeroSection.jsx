@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Sparkles, Users } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
+import Logo from '@/components/ui/Logo'
 
 export default function HeroSection() {
   return (
@@ -33,12 +34,10 @@ export default function HeroSection() {
             Haute Couture Algérienne
           </p>
 
-          {/* Main title */}
-          <h1 className="font-display text-6xl md:text-8xl lg:text-9xl text-ivory mb-4 leading-none">
-            <span className="text-gold-gradient">MT</span>
-            <br />
-            <span className="font-editorial italic font-light">Moda Creaz</span>
-          </h1>
+          {/* Logo */}
+          <div className="flex justify-center mb-6">
+            <Logo className="h-40 md:h-56" />
+          </div>
 
           {/* Tagline */}
           <p className="font-editorial italic text-xl md:text-2xl text-ivory/60 mb-10 mt-6">
