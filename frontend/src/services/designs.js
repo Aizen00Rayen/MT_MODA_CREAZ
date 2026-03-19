@@ -8,17 +8,36 @@ let designs = [...DESIGNS]
 // Pollinations.ai — completely free, no API key required
 async function generateImage(promptText, styleTags) {
   const fullPrompt = [
-    'Algerian fashion design illustration haute couture',
+    'Algerian haute couture fashion illustration',
     promptText,
     styleTags.length ? styleTags.join(' ') : '',
-    'elegant detailed fashion sketch white background full outfit',
+    'elegant full outfit dark background',
   ].filter(Boolean).join(', ')
 
   const encoded = encodeURIComponent(fullPrompt)
-  const seed = Date.now() % 99999
-  const url = `https://image.pollinations.ai/prompt/${encoded}?width=768&height=768&seed=${seed}&nologo=true&model=flux`
+  const seed = Math.floor(Math.random() * 99999)
 
-  return url
+  const urls = [
+    `https://image.pollinations.ai/prompt/${encoded}?width=768&height=768&seed=${seed}&nologo=true`,
+    `https://image.pollinations.ai/prompt/${encoded}?seed=${seed}&nologo=true`,
+  ]
+
+  for (const url of urls) {
+    try {
+      const controller = new AbortController()
+      const timeout = setTimeout(() => controller.abort(), 60000)
+      const response = await fetch(url, { signal: controller.signal })
+      clearTimeout(timeout)
+      if (!response.ok) continue
+      const blob = await response.blob()
+      if (blob.size < 1000) continue // not a real image
+      return URL.createObjectURL(blob)
+    } catch {
+      // try next URL
+    }
+  }
+
+  throw new Error('Génération échouée. Réessayez.')
 }
 
 export const designsService = {
