@@ -29,7 +29,7 @@ api.interceptors.response.use(
         return Promise.reject(error)
       }
       try {
-        const { data } = await axios.post('/api/auth/refresh/', { refresh: refreshToken })
+        const { data } = await api.post('/api/auth/refresh/', { refresh: refreshToken })
         setAuth(user, data.access, refreshToken)
         original.headers.Authorization = `Bearer ${data.access}`
         return api(original)
