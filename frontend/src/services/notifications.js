@@ -1,10 +1,24 @@
-import api from './api'
+import { NOTIFICATIONS } from '@/data/mockData'
+
+const delay = (ms = 200) => new Promise((r) => setTimeout(r, ms))
+
+let notifications = [...NOTIFICATIONS]
 
 export const notificationsService = {
-  list: () => api.get('/api/notifications/').then((r) => r.data),
-  unreadCount: () => api.get('/api/notifications/unread-count/').then((r) => r.data),
-  markRead: (id) =>
-    id
-      ? api.post(`/api/notifications/${id}/mark-read/`).then((r) => r.data)
-      : api.post('/api/notifications/mark-read/').then((r) => r.data),
+  list: async () => {
+    await delay()
+    return { results: notifications, count: notifications.length }
+  },
+
+  unreadCount: async () => {
+    await delay()
+    return { count: notifications.filter((n) => !n.read).length }
+  },
+
+  markRead: async (id) => {
+    await delay()
+    notifications = id
+      ? notifications.map((n) => (n.id === id ? { ...n, read: true } : n))
+      : notifications.map((n) => ({ ...n, read: true }))
+  },
 }

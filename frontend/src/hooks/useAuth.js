@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import { authService } from '@/services/auth'
 import { useAuthStore } from '@/store/authStore'
+import { DEMO_USERS } from '@/data/mockData'
 
 export function useLogin() {
   const { setAuth } = useAuthStore()
@@ -17,13 +18,26 @@ export function useLogin() {
         data.refresh
       )
       toast.success('Connexion réussie')
-      const role = data.role
-      if (role === 'admin') navigate('/admin')
-      else if (role === 'tailor') navigate('/dashboard/tailor')
+      if (data.role === 'admin') navigate('/admin')
+      else if (data.role === 'tailor') navigate('/dashboard/tailor')
       else navigate('/dashboard/client')
     },
     onError: () => toast.error('Email ou mot de passe incorrect'),
   })
+}
+
+export function useDemoLogin() {
+  const { setAuth } = useAuthStore()
+  const navigate = useNavigate()
+
+  return (role) => {
+    const user = DEMO_USERS[role]
+    setAuth(user, 'mock-access-token', 'mock-refresh-token')
+    toast.success(`Connecté en tant que ${role === 'client' ? 'Cliente' : role === 'tailor' ? 'Couturière' : 'Admin'}`)
+    if (role === 'admin') navigate('/admin')
+    else if (role === 'tailor') navigate('/dashboard/tailor')
+    else navigate('/dashboard/client')
+  }
 }
 
 export function useRegister() {
@@ -39,24 +53,19 @@ export function useRegister() {
         data.tokens.refresh
       )
       toast.success('Compte créé avec succès')
-      const role = data.role
-      if (role === 'tailor') navigate('/dashboard/tailor')
+      if (data.role === 'tailor') navigate('/dashboard/tailor')
       else navigate('/dashboard/client')
     },
-    onError: (err) => {
-      const msg = err.response?.data?.email?.[0] || 'Erreur lors de l\'inscription'
-      toast.error(msg)
-    },
+    onError: () => toast.error("Erreur lors de l'inscription"),
   })
 }
 
 export function useLogout() {
-  const { logout, refreshToken } = useAuthStore()
+  const { logout } = useAuthStore()
   const navigate = useNavigate()
   const queryClient = useQueryClient()
 
   return () => {
-    authService.logout(refreshToken).catch(() => {})
     logout()
     queryClient.clear()
     navigate('/')

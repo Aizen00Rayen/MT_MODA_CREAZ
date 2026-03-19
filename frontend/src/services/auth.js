@@ -1,13 +1,35 @@
-import api from './api'
+import { DEMO_USERS } from '@/data/mockData'
+
+const delay = (ms = 400) => new Promise((r) => setTimeout(r, ms))
 
 export const authService = {
-  register: (data) => api.post('/api/auth/register/', data).then((r) => r.data),
-  login: (email, password) =>
-    api.post('/api/auth/login/', { email, password }).then((r) => r.data),
-  logout: (refreshToken) =>
-    api.post('/api/auth/logout/', { refresh: refreshToken }).then((r) => r.data),
-  refresh: (refreshToken) =>
-    api.post('/api/auth/refresh/', { refresh: refreshToken }).then((r) => r.data),
-  getProfile: () => api.get('/api/auth/profile/').then((r) => r.data),
-  updateProfile: (data) => api.patch('/api/auth/profile/', data).then((r) => r.data),
+  login: async (email, _password) => {
+    await delay()
+    const user = Object.values(DEMO_USERS).find((u) => u.email === email)
+    if (!user) throw new Error('Email ou mot de passe incorrect')
+    return {
+      access: 'mock-access-token',
+      refresh: 'mock-refresh-token',
+      user_id: user.id,
+      email: user.email,
+      full_name: user.full_name,
+      role: user.role,
+    }
+  },
+
+  register: async (data) => {
+    await delay()
+    return {
+      id: 'u-new',
+      email: data.email,
+      full_name: data.full_name,
+      role: data.role || 'client',
+      tokens: { access: 'mock-access-token', refresh: 'mock-refresh-token' },
+    }
+  },
+
+  logout: async () => { await delay(100) },
+  refresh: async () => ({ access: 'mock-access-token' }),
+  getProfile: async () => { await delay(); return DEMO_USERS.client },
+  updateProfile: async (data) => { await delay(); return data },
 }

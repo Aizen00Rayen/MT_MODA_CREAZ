@@ -1,11 +1,10 @@
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Sparkles, Save, ShoppingBag, Download } from 'lucide-react'
+import { Sparkles, Save, ShoppingBag } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { StyleTagPicker } from '@/components/design/StyleTagPicker'
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner'
-import { useAuthStore } from '@/store/authStore'
 import { useStudioStore } from '@/store/studioStore'
-import { useGenerateDesign } from '@/hooks/useDesigns'
 import { designsService } from '@/services/designs'
 import toast from 'react-hot-toast'
 
@@ -18,37 +17,39 @@ const LOADING_MESSAGES = [
 
 export default function AIStudioPage() {
   const navigate = useNavigate()
-  const { user, isAuthenticated } = useAuthStore()
+  const [msgIdx, setMsgIdx] = useState(0)
   const {
     prompt, setPrompt, selectedStyles, toggleStyle,
     isGenerating, setGenerating, currentDesign, setDesign,
     generationHistory,
   } = useStudioStore()
 
-  const { mutate: generateDesign } = useGenerateDesign()
-
   const handleGenerate = async () => {
     if (!prompt.trim()) {
-      toast.error('Décrivez votre design d\'abord.')
+      toast.error("Décrivez votre design d'abord.")
       return
     }
-
-    if (!isAuthenticated()) {
-      toast.error('Connectez-vous pour générer un design.')
-      navigate('/login')
-      return
-    }
-
     setGenerating(true)
+    const interval = setInterval(() => setMsgIdx((i) => (i + 1) % LOADING_MESSAGES.length), 2500)
     try {
       const data = await designsService.generate({ prompt_text: prompt, style_tags: selectedStyles })
       setDesign(data)
       toast.success('Votre design a été créé !')
     } catch (err) {
-      const msg = err.response?.data?.detail || 'Génération échouée. Réessayez.'
-      toast.error(msg)
+      toast.error(err.message || 'Génération échouée. Réessayez.')
     } finally {
+      clearInterval(interval)
       setGenerating(false)
+    }
+  }
+
+  const handleSave = async () => {
+    if (!currentDesign?.id) return
+    try {
+      await designsService.toggleSave(currentDesign.id)
+      toast.success('Design sauvegardé !')
+    } catch {
+      toast.error('Erreur de sauvegarde')
     }
   }
 
@@ -99,11 +100,9 @@ export default function AIStudioPage() {
               {isGenerating ? 'Génération en cours...' : 'Générer mon design'}
             </Button>
 
-            {!isAuthenticated() && (
-              <p className="text-center font-ui text-xs text-ivory/40">
-                Connexion requise pour générer et sauvegarder des designs.
-              </p>
-            )}
+            <p className="text-center font-ui text-xs text-ivory/30">
+              Propulsé par Gemini AI · Haute couture algérienne
+            </p>
           </div>
 
           {/* Right panel: Output */}
@@ -113,7 +112,7 @@ export default function AIStudioPage() {
                 <div className="aspect-square flex flex-col items-center justify-center bg-charcoal">
                   <LoadingSpinner size="xl" className="mb-6" />
                   <p className="font-editorial italic text-ivory/60 text-lg text-center px-8">
-                    {LOADING_MESSAGES[Math.floor(Date.now() / 3000) % LOADING_MESSAGES.length]}
+                    {LOADING_MESSAGES[msgIdx]}
                   </p>
                   <div className="mt-4 flex gap-1">
                     {[0, 1, 2].map((i) => (
@@ -130,7 +129,6 @@ export default function AIStudioPage() {
                     className="w-full aspect-square object-cover"
                   />
                   <div className="p-4">
-                    {/* Color palette */}
                     {currentDesign.color_palette?.length > 0 && (
                       <div className="flex gap-2 mb-4">
                         {currentDesign.color_palette.map((color, i) => (
@@ -143,19 +141,16 @@ export default function AIStudioPage() {
                         ))}
                       </div>
                     )}
-                    {/* Actions */}
                     <div className="flex gap-2 flex-wrap">
-                      {currentDesign.id && (
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => { designsService.toggleSave(currentDesign.id); toast.success('Sauvegardé !') }}
-                          className="flex items-center gap-1.5"
-                        >
-                          <Save size={13} />
-                          Sauvegarder
-                        </Button>
-                      )}
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={handleSave}
+                        className="flex items-center gap-1.5"
+                      >
+                        <Save size={13} />
+                        Sauvegarder
+                      </Button>
                       <Button
                         variant="primary"
                         size="sm"
