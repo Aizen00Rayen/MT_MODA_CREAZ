@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Sparkles, Save, ShoppingBag } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
@@ -18,6 +18,8 @@ const LOADING_MESSAGES = [
 export default function AIStudioPage() {
   const navigate = useNavigate()
   const [msgIdx, setMsgIdx] = useState(0)
+  const [imgLoaded, setImgLoaded] = useState(false)
+  const [imgError, setImgError] = useState(false)
   const {
     prompt, setPrompt, selectedStyles, toggleStyle,
     isGenerating, setGenerating, currentDesign, setDesign,
@@ -33,6 +35,8 @@ export default function AIStudioPage() {
     const interval = setInterval(() => setMsgIdx((i) => (i + 1) % LOADING_MESSAGES.length), 2500)
     try {
       const data = await designsService.generate({ prompt_text: prompt, style_tags: selectedStyles })
+      setImgLoaded(false)
+      setImgError(false)
       setDesign(data)
       toast.success('Votre design a été créé !')
     } catch (err) {
@@ -123,11 +127,28 @@ export default function AIStudioPage() {
                 </div>
               ) : currentDesign ? (
                 <div>
-                  <img
-                    src={currentDesign.generated_image_url}
-                    alt="Design généré"
-                    className="w-full aspect-square object-cover"
-                  />
+                  <div className="relative aspect-square">
+                    {!imgLoaded && !imgError && (
+                      <div className="absolute inset-0 flex flex-col items-center justify-center bg-charcoal">
+                        <LoadingSpinner size="xl" className="mb-4" />
+                        <p className="font-editorial italic text-ivory/60 text-sm">Chargement de l'image...</p>
+                      </div>
+                    )}
+                    {imgError && (
+                      <div className="absolute inset-0 flex flex-col items-center justify-center bg-charcoal">
+                        <p className="font-editorial italic text-ivory/40 text-sm text-center px-8">
+                          Impossible de charger l'image. Réessayez.
+                        </p>
+                      </div>
+                    )}
+                    <img
+                      src={currentDesign.generated_image_url}
+                      alt="Design généré"
+                      className={`w-full h-full object-cover transition-opacity duration-500 ${imgLoaded ? 'opacity-100' : 'opacity-0'}`}
+                      onLoad={() => setImgLoaded(true)}
+                      onError={() => setImgError(true)}
+                    />
+                  </div>
                   <div className="p-4">
                     {currentDesign.color_palette?.length > 0 && (
                       <div className="flex gap-2 mb-4">
